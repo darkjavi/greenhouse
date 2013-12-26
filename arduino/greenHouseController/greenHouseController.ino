@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include "DHT.h"
+#include <PID_v1.h>
 
 #include "/home/darkjavi/sketchbook/libraries/StandardCplusplus/StandardCplusplus.h"
 #include "/home/darkjavi/sketchbook/libraries/StandardCplusplus/serstream"
@@ -18,13 +19,13 @@
 #define LED0_WATTS  30
 
 #define LED1_PIN    7
-#define LED1_WATTS  10
+#define LED1_WATTS  60
 
-#define LED2_PIN    8
-#define LED2_WATTS  10
+//#define LED2_PIN    8
+//#define LED2_WATTS  10
 
-#define LED3_PIN    9
-#define LED3_WATTS  10
+//#define LED3_PIN    9
+//#define LED3_WATTS  10
 
 //#define LED4_PIN    9
 //#define LED4_WATTS  10
@@ -42,11 +43,12 @@
 #define LAMP_FAN_PIN  5
 
 #define TEMP_SENSOR_MIN_TEMP    5        //minimal possible temp(less will be considered as misread!)
-#define LAMP_MIN_TEMPERATURE 	30 	// treshold to start fans
-#define LAMP_TARGET_TEMPERATURE 40  // target temperature
+#define LAMP_MIN_TEMPERATURE 	20 	// treshold to start fans
+#define LAMP_TARGET_TEMPERATURE 500  // target temperature
 #define LAMP_CRITICAL_TEMP   	70	// shutdown temperature
 
-#define DHT_PIN         52
+#define DHT_PIN         12
+#define ACS712_PIN      A1
 //#define PUMP_PIN        3
 //#define PUMP_FLOW_PIN   2
 
@@ -63,7 +65,8 @@ namespace std
 
 lamp ghLamp;
 pump ghPump;
-DHT ghDHTSensor(DHT_PIN,DHT11);
+DHT  ghDHTSensor(DHT_PIN,DHT11);
+acs712 ghCurrentSensor(ACS712_PIN);
 
 unsigned int ips = 0;
 
@@ -93,6 +96,9 @@ void sendData()
     data_str+=",";
     data_str+="AMBIENT_HUMID:";
     data_str+= (int)h;
+    data_str+=",";
+    data_str+="POWER_DRAIN:";
+    data_str+=ghCurrentSensor.currentPower();
     data_str+=",";
     data_str+="IPS:";
     data_str+=(int)ips;
@@ -183,5 +189,5 @@ void loop()
     ghLamp.check();
     sendData();
     receiveData();
-    delay(500);
+    //delay(500);
 }
