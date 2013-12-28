@@ -40,17 +40,17 @@
 //#define LED7_WATTS  10
 
 #define LAMP_TEMP_PIN A0
-#define LAMP_FAN_PIN  5
+//#define LAMP_FAN_PIN  5
 
 #define TEMP_SENSOR_MIN_TEMP    5        //minimal possible temp(less will be considered as misread!)
-#define LAMP_MIN_TEMPERATURE 	20 	// treshold to start fans
-#define LAMP_TARGET_TEMPERATURE 500  // target temperature
+#define LAMP_MIN_TEMPERATURE 	15 	// treshold to start fans
+#define LAMP_TARGET_TEMPERATURE 25  // target temperature
 #define LAMP_CRITICAL_TEMP   	70	// shutdown temperature
 
 #define DHT_PIN         12
 #define ACS712_PIN      A1
-//#define PUMP_PIN        3
-//#define PUMP_FLOW_PIN   2
+#define PUMP_PIN        5
+#define PUMP_FLOW_INT   0
 
 
 using namespace std;
@@ -64,7 +64,7 @@ namespace std
 #include "greenHouseAccesories.h"
 
 lamp ghLamp;
-pump ghPump;
+pump ghPump(PUMP_PIN);
 DHT  ghDHTSensor(DHT_PIN,DHT11);
 acs712 ghCurrentSensor(ACS712_PIN);
 
@@ -160,6 +160,11 @@ void setup()
     ghLamp.addLed(LED7_PIN,LED7_WATTS);   
 #endif
 
+#ifdef PUMP_FLOW_INT
+    attachInterrupt(0,flowSensor,RISING);
+#endif
+
+
     Serial.println("[INIT!]");
     ghDHTSensor.begin();
     cout << "[INFO]Lamp have "<<ghLamp.leds().size() << " leds\n";
@@ -168,25 +173,26 @@ void setup()
     else cout << "[INFO]Lamp DOESN'T have fan control!\n";
     if(ghLamp.haveTempSensor()) cout << "[INFO]Lamp have temp sensor on pin:"<<tempPin<<"\n";
     else cout << "[INFO]Lamp DOESN'T have temp sensor!\n";
-    ghLamp.test();
-    ghLamp.switchOn();
+//    ghLamp.test();
+//    ghLamp.switchOn();
 //    delay(1000);
 //    ghLamp.switchOff();
 //    delay(1000);
-//    ghLamp.leds()[0].switchOn();
-//    attachInterrupt(0,int0,RISING);
+    ghLamp.leds()[1].switchOn();
+    delay(1000);
+    //ghPump.pumpMl(50);
+
 }
 
-void int0()
+void flowSensor()
 {
-//  noInterrupts();
-    ips++;
-//  interrupts();
+    ghPump.flow();
 }
 
 void loop()
 {
     ghLamp.check();
+    ghPump.check();
     sendData();
     receiveData();
     //delay(500);

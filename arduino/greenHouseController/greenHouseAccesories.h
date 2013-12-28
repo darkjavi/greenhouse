@@ -172,20 +172,73 @@ private:
 class pump
 {
 public:
-    pump(int pump_pin = -1, int flow_pin_int = -1)
+    pump(int pump_pin = -1)
     {
         m_pumpPin = pump_pin;
-        m_flowPin = flow_pin_int;
+        if(m_pumpPin > -1)
+            pinMode(m_pumpPin, OUTPUT);
+    }
+    void pumpMl(int ml)
+    {
+        analogWrite(m_pumpPin,100);// a 254 pasaban cosas extrañas
+        m_mlsRemaining += ml;
+        m_pumping = true;
     }
 
     void flow()
     {
-        cout << "[DEBUG]Something flew!\n";
+        m_flowSteps++;
+    }
+
+    void check()
+    {
+        Serial.print(m_flowSteps);
+        if(m_pumping)
+        {
+            if(m_flowSteps == 0)
+            {
+                Serial.println("[WARN] WATER IS NOT FLOWING!");
+            }
+            double flow = 1000.0f/4380.0f * m_flowSteps;
+            m_flowSteps = 0;
+            m_pumped+=flow;
+            if(m_mlsRemaining <= flow)
+            {
+                m_pumping = false;
+                analogWrite(m_pumpPin,0);
+                m_mlsRemaining = 0;
+            }
+            else
+            {
+                m_mlsRemaining -= flow;
+                Serial.print("[INFO]PUMPED ");
+                Serial.print(flow);
+                Serial.print("ml . REMAINING");
+                Serial.println(m_mlsRemaining);
+            }
+        }
+        else
+        {
+            if(m_flowSteps == 0)
+                return;
+            double flow = 1000.0f/4380.0f * double(m_flowSteps);
+            m_flowSteps = 0;
+            m_pumped+=flow;
+            Serial.print("[WARN] UNEXPECTED WATER FLOWING:");
+            Serial.print(flow);
+            Serial.print("ml");
+            Serial.print(m_pumped);
+            Serial.print("\n");
+        }
+
     }
 
 private:
-    int m_pumpPin;
-    int m_flowPin;
+    int          m_pumpPin;
+    bool         m_pumping;
+    double       m_pumped;
+    double       m_mlsRemaining;
+    unsigned int m_flowSteps;
 };
 
 class lamp{

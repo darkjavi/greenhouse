@@ -9,7 +9,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT       += serialport
 } else {
-    include(../qt-qtserialport/src/serialport/qt4support/serialport.prf)
+    include(qserialport/serialport-lib.pri)
 }
 
 TARGET = greenHouse
