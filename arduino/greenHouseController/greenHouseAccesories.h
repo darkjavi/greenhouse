@@ -274,7 +274,7 @@ public:
         #ifdef DEBUG
             cout << "[DEBUG]Lamp power: " << activePower() << "W\n";
         #endif
-            delay(100);
+            delay(500);
         }
     }
     void switchOff()
@@ -285,7 +285,7 @@ public:
         #ifdef DEBUG
             cout << "[DEBUG]Lamp power: " << activePower() << "W\n";
         #endif
-            delay(50);
+            delay(200);
         }
     }
     void test()
@@ -294,7 +294,7 @@ public:
         for(int i = 0 ; i<m_leds.size() ; i++)
         {
             m_leds[i].switchOn();
-            delay(1000);
+            delay(2000);
             m_leds[i].switchOff();
             m_fan.setSpeed(m_fan.speed()/2);
         }

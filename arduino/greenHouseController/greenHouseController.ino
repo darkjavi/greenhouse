@@ -19,15 +19,15 @@
 #define LED0_WATTS  30
 
 #define LED1_PIN    7
-#define LED1_WATTS  60
+#define LED1_WATTS  20
 
-//#define LED2_PIN    8
-//#define LED2_WATTS  10
+#define LED2_PIN    8
+#define LED2_WATTS  20
 
-//#define LED3_PIN    9
-//#define LED3_WATTS  10
+#define LED3_PIN    9
+#define LED3_WATTS  20
 
-//#define LED4_PIN    9
+//#define LED4_PIN    10
 //#define LED4_WATTS  10
 
 //#define LED5_PIN    10
@@ -173,13 +173,13 @@ void setup()
     else cout << "[INFO]Lamp DOESN'T have fan control!\n";
     if(ghLamp.haveTempSensor()) cout << "[INFO]Lamp have temp sensor on pin:"<<tempPin<<"\n";
     else cout << "[INFO]Lamp DOESN'T have temp sensor!\n";
-//    ghLamp.test();
-//    ghLamp.switchOn();
+    ghLamp.test();
+    ghLamp.switchOn();
 //    delay(1000);
 //    ghLamp.switchOff();
 //    delay(1000);
-    ghLamp.leds()[1].switchOn();
-    delay(1000);
+//    ghLamp.leds()[1].switchOn();
+//    delay(1000);
     //ghPump.pumpMl(50);
 
 }

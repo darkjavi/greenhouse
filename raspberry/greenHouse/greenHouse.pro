@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT       += serialport
@@ -17,8 +17,22 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    vpparserserial.cpp \
+    vpparser.cpp \
+    vp2dsimplegraph.cpp \
+    ghcontroller.cpp \
+    ghserialcontroller.cpp \
+    ghtcpserver.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    vpparserserial.h \
+    vpparser.h \
+    vp2dsimplegraph.h \
+    sleeper.h \
+    ghcontroller.h \
+    ghserialcontroller.h \
+    ghtcpserver.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    vp2dsimplegraph.ui

@@ -2,7 +2,7 @@
 #define VP2DSIMPLEGRAPH_H
 
 #include <QFrame>
-#include "vpdataset.h"
+//#include "vpdataset.h"
 #include <QMouseEvent>
 #include <QVector>
 
